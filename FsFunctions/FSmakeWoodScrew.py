@@ -33,8 +33,8 @@ def makeWoodScrew(self, fa): # dynamically loaded method of class Screw
         return makeDIN571(self, fa)
     elif SType == "DIN96":
         return makeDIN96(self, fa)
-    elif SType == "GOST1144-1" or SType == "GOST1144-2" or SType == "GOST1144-3" or SType == "GOST1144-4":
-        return makeGOST1144(self, fa)
+    elif SType == "GOST1144(1)" or SType == "GOST1144(2)" or SType == "GOST1144(3)" or SType == "GOST1144(4)":
+        return makeGOSTWoodScrew(self, fa)
 
 # DIN571 Wood screw
 
@@ -169,31 +169,31 @@ def makeDIN96(screw_obj, fa):
 
     return screw
 
-# GOST1144-1 Wood screw
-# GOST1144-2 Wood screw
-# GOST1144-3 Wood screw
-# GOST1144-4 Wood screw
+# GOST1144(1) Wood screw
+# GOST1144(2) Wood screw
+# GOST1144(3) Wood screw
+# GOST1144(4) Wood screw
 
-def makeGOST1144(self, fa):
+def makeGOSTWoodScrew(self, fa):
     SType = fa.type
     l = fa.calc_len
-    dia = float(fa.calc_diam.split()[0])
+    d1 = float(fa.calc_diam.split()[0])
 
     # load screw parameters from *.csv tables
-    if SType == "GOST1144-1" or SType == "GOST1144-2":
+    if SType == "GOST1144(1)" or SType == "GOST1144(2)":
         d2, P, D, K, sb, h = fa.dimTable
-    elif SType == "GOST1144-3" or SType == "GOST1144-4":
+    elif SType == "GOST1144(3)" or SType == "GOST1144(4)":
         d2, P, D, K, PH, m, h = fa.dimTable
         
     # types 2 and 4 have full length thread while types 1 and 3 do not
     b = l
     full_length=True
-    if SType == "GOST1144-1" or SType == "GOST1144-3":
+    if SType == "GOST1144(1)" or SType == "GOST1144(3)":
        b = l * 0.6
        full_length=False
 
+    ro = d1 / 2.0   # outer thread radius
     ri = d2 / 2.0   # inner thread radius
-    ro = dia / 2.0  # outer thread radius
  
     # inner radius of screw section
     sr = ro
@@ -201,7 +201,7 @@ def makeGOST1144(self, fa):
         sr = ri
 
     # lenght of cylindrical part where thread begins to grow.    
-    slope_length = (ro-ri)
+    slope_length = P  # <=2P according to technical conditions
 
     # calculation of screw tip length
     # Sharpness of screw tip is equal 40 degrees. If imagine half of screw tip
@@ -229,7 +229,7 @@ def makeGOST1144(self, fa):
     fm.AddBSpline(D/2, K, D/2, 0)
 
     # 2) add rounding under screw head
-    rr=dia/10
+    rr=d1/10
     fm.AddPoint(ro+rr, 0)      # first point of rounding
     if fa.thread and full_length:
        fm.AddBSpline(ro, 0, sr, -slope_length) # create spline rounding
@@ -239,11 +239,11 @@ def makeGOST1144(self, fa):
     # 3) cylindrical part (place where thread will be added)
     if not full_length:
        if fa.thread:
-          fm.AddPoint(ro, -l+b+slope_length)    # entery point of thread
-       fm.AddPoint(sr, -l+b)   # start of full width thread b >= l*0.6
+          fm.AddPoint(ro, -(l-b-slope_length))    # entery point of thread
+       fm.AddPoint(sr, -(l-b))   # start of full width thread b >= l*0.6
 
     # 4) sharp end (cone shape)
-    fm.AddPoint(sr, -l+tip_lenght)
+    fm.AddPoint(sr, -(l-tip_lenght))
     fm.AddPoint(0, -l)
 
     # make profile from points (lines and arcs)  
@@ -253,15 +253,15 @@ def makeGOST1144(self, fa):
     screw = self.RevolveZ(profile)
 
     # make slot in screw head
-    if SType == "GOST1144-1" or SType == "GOST1144-2":
+    if SType == "GOST1144(1)" or SType == "GOST1144(2)":
         recess = Part.makeBox(D, sb, h+1, Base.Vector(-D/2, -sb/2, K-h))
-    elif SType == "GOST1144-3" or SType == "GOST1144-4":
+    elif SType == "GOST1144(3)" or SType == "GOST1144(4)":
         recess, recessShell = self.makeCross_H3(PH, m, h)
     screw = screw.cut(recess)
 
     # make thread
     if fa.thread:
-        thread = self.makeDin7998Thread(-l+b+slope_length, -l+tip_lenght, -l, ri, ro, P)
+        thread = self.makeDin7998Thread(-(l-b), -(l-tip_lenght), -l, ri, ro, P)
         screw = screw.fuse(thread)
 
     return screw

@@ -123,16 +123,16 @@ FSScrewCommandTable = {
     "ISO1580": (translate("FastenerCmd", "ISO 1580 Slotted pan head screw"), SlottedGroup, ScrewParametersLC),
     "ISO1207": (translate("FastenerCmd", "ISO 1207 Slotted cheese head screw"), SlottedGroup, ScrewParametersLC),
     "DIN96":   (translate("FastenerCmd", "DIN 96 Slotted half round head wood screw"), SlottedGroup, ScrewParametersLC),
-    "GOST1144-1": (translate("FastenerCmd", "GOST 1144 (Type 1) Half — round head wood screw"), SlottedGroup, ScrewParametersLC),
-    "GOST1144-2": (translate("FastenerCmd", "GOST 1144 (Type 2) Half — round head wood screw"), SlottedGroup, ScrewParametersLC),
+    "GOST1144(1)": (translate("FastenerCmd", "GOST 1144 (Type 1) Half — round head wood screw"), SlottedGroup, ScrewParametersLC),
+    "GOST1144(2)": (translate("FastenerCmd", "GOST 1144 (Type 2) Half — round head wood screw"), SlottedGroup, ScrewParametersLC),
 
     "DIN967": (translate("FastenerCmd", "DIN 967 Cross recessed pan head screws with collar"), HCrossGroup, ScrewParametersLC),
     "ISO7045": (translate("FastenerCmd", "ISO 7045 Pan head screws type H cross recess"), HCrossGroup, ScrewParametersLC),
     "ISO7046": (translate("FastenerCmd", "ISO 7046 Countersunk flat head screws H cross r."), HCrossGroup, ScrewParametersLC),
     "ISO7047": (translate("FastenerCmd", "ISO 7047 Raised countersunk head screws H cross r."), HCrossGroup, ScrewParametersLC),
     "ISO7048": (translate("FastenerCmd", "ISO 7048 Cheese head screws with type H cross r."), HCrossGroup, ScrewParametersLC),
-    "GOST1144-3": (translate("FastenerCmd", "GOST 1144 (Type 3) Half — round head wood screw"), HCrossGroup, ScrewParametersLC),
-    "GOST1144-4": (translate("FastenerCmd", "GOST 1144 (Type 4) Half — round head wood screw"), HCrossGroup, ScrewParametersLC),
+    "GOST1144(3)": (translate("FastenerCmd", "GOST 1144 (Type 3) Half — round head wood screw"), HCrossGroup, ScrewParametersLC),
+    "GOST1144(4)": (translate("FastenerCmd", "GOST 1144 (Type 4) Half — round head wood screw"), HCrossGroup, ScrewParametersLC),
 
     "DIN603": (translate("FastenerCmd", "DIN 603 Mushroom head square neck bolts"), OtherHeadGroup, ScrewParametersLC),
 
